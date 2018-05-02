@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 import re
-import datetime
 from sklearn import *
 import numpy as np
+import pickle
 
 
 # import required packages
@@ -12,9 +12,15 @@ import numpy as np
 
 # Remove this package after integration
 import random
+import datetime
 
 
 text = r'^((.)+(\n)*)+$'
+
+# Loading the model object from a pickle file
+# Dump the pickle data of the model into the file "model.pickle" in the root folder of the project "esgine/"
+# Currently model.pickle if filled with dummy pickle data of a datetime.datetime object
+model = pickle.load(open("model.pickle", "rb"))
 
 
 # Remove this function after integrating the predict call of the model
@@ -34,12 +40,12 @@ def run_cases(paras):
         # Asuming that the predict function will return a list(or a numpy array) with the topic as the 0th element and confidence as the 1st element
         # This is a dummy predict function implementation
         prediction = predict(paras[i])
-        result = prediction
 
+        # Reformating the result and saving it in a dictionary
         res[i] = {
             "para": paras[i],
-            "topic": result[0],
-            "confidence": result[1]
+            "topic": prediction[0],
+            "confidence": prediction[1]
         }
 
     return res
