@@ -20,6 +20,7 @@ text = r'^((.)+(\n)*)+$'
 # Loading the model object from a pickle file
 # Dump the pickle data of the model into the file "model.pickle" in the root folder of the project "esgine/"
 # Currently model.pickle if filled with dummy pickle data of a datetime.datetime object
+# If this line thrown an error replace the filename with the absolutepath of the path
 model = pickle.load(open("model.pickle", "rb"))
 
 
@@ -72,8 +73,10 @@ class Predict(APIView):
 
             # Validating the format of the contents of the text file
             if not bool(re.match(text, text_data)):
-                error["error"].append("invalid contents of text file")
+                error["error"].append("Invalid contents of text file")
 
+        except UnicodeDecodeError:
+            error["error"].append("Invalid text encoding")
         except KeyError:
             error["error"].append("The following key is required: text")
         except AttributeError:

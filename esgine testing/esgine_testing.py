@@ -5,17 +5,22 @@ import json
 URL = "http://127.0.0.1:8000/predict/"
 
 
-multipart_form_data = {'text': ('test.bin', open('text.txt', 'r'))}
+multipart_form_data = {'text': ('text.bin', open('text.bin', 'rb'))}
 
 
 def pretty_print(data):
 	print("{")
-	for i in data:
-		print(str(i) + ": ")
-		print("\t{")
-		for j in data[i]:
-			print("\t" + str(j) + ": " + str(data[i][j]))
-		print("\t}")
+	if "error" in data:
+		print("error: ")
+		for i in data["error"]:
+			print("\t" + i)
+	else:
+		for i in data:
+			print(str(i) + ": ")
+			print("\t{")
+			for j in data[i]:
+				print("\t" + str(j) + ": " + str(data[i][j]))
+			print("\t}")
 	print("}")
 
 
