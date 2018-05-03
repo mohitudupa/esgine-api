@@ -1,0 +1,28 @@
+# Install instructions for windows
+Python version 3.6
+
+# install virtualenv
+$ pip install virtualenv
+
+# Create a virtual environment
+$ virtualenv <folder_name>
+
+# Start the virtual environment
+$ cd <folder_name>
+$ Scripts\activate
+
+# Installing all the required libraries
+$ pip install Django==2.0.4
+$ pip install django-filter==1.1.0
+$ pip install djangorestframework==3.8.2
+$ pip install Markdown==2.6.11
+$ pip install numpy==1.14.2
+$ pip install scikit-learn==0.19.1
+$ pip install scipy==1.0.1
+$ pip install sklearn==0.0
+
+# Install any other libraries if needed
+
+# Starting the server
+$ cd esgine
+$ python manage.py runserver
