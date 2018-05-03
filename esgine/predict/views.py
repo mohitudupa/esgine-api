@@ -5,6 +5,7 @@ import re
 from sklearn import *
 import numpy as np
 import pickle
+import pandas as pd
 
 
 # import required packages
@@ -33,23 +34,22 @@ def predict(para):
 
 
 def run_cases(paras):
-    res = {}
+
+    # Initializing the result dataframe
+    df = pd.DataFrame(columns=["para", "topic", "confidence"])
+
     for i in range(len(paras)):
         # Call the predict function on the required model for every paragraph.
-        # res.append(model.predict(paras[i]))
+        # prediction = model.predict(paras[i])
 
         # Asuming that the predict function will return a list(or a numpy array) with the topic as the 0th element and confidence as the 1st element
         # This is a dummy predict function implementation
         prediction = predict(paras[i])
 
-        # Reformating the result and saving it in a dictionary
-        res[i] = {
-            "para": paras[i],
-            "topic": prediction[0],
-            "confidence": prediction[1]
-        }
+        # Saving the result into the dataframe
+        df.loc[i] = [paras[i], prediction[0], prediction[1]]
 
-    return res
+    return df
 
 
 class Predict(APIView):
@@ -92,7 +92,18 @@ class Predict(APIView):
                 paras.append(i.strip())
 
         # Running predictions on the model
-        result = run_cases(paras)
+        data_frame = run_cases(paras)
+
+        result = {}
+
+        for i in range(len(data_frame["para"])):
+            result[i] = {
+                    "para": data_frame["para"][i],
+                    "topic": data_frame["topic"][i],
+                    "confidence": data_frame["confidence"][i],
+            }
+
+        print(data_frame)
 
         # Returning result dictionary
         return Response(result)
