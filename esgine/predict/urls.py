@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
 urlpatterns = [
-	path('', views.Predict.as_view(), name="Predict")
+	path('', views.predict, name="Predict"),
+	path('api/', include('predict.api.urls')),
 ]

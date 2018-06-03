@@ -2,26 +2,10 @@ import requests
 import json
 
 
-URL = "http://127.0.0.1:8000/predict/"
+URL = "http://127.0.0.1:8000/predict/api/"
 
 
-multipart_form_data = {'text': ('text.bin', open('text.bin', 'rb'))}
-
-
-def pretty_print(data):
-	print("{")
-	if "error" in data:
-		print("error: ")
-		for i in data["error"]:
-			print("\t" + i)
-	else:
-		for i in data:
-			print(str(i) + ": ")
-			print("\t{")
-			for j in data[i]:
-				print("\t" + str(j) + ": " + str(data[i][j]))
-			print("\t}")
-	print("}")
+multipart_form_data = {'text': ('text.bin', open('esgine.csv', 'r'))}
 
 
 def send_request():
@@ -32,10 +16,11 @@ def send_request():
 			print("OK")
 		else:
 			print("Error")
-		pretty_print(r.json())
+		print(r.json())
 		r.close()
-	except:
+	except Exception as e:
 		print("Exception in send_request function")
+		print(e)
 
 
 def main():

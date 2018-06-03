@@ -1,0 +1,283 @@
+{% extends "predict/base.html" %}
+{% load staticfiles %}
+
+{% block style %}
+
+{% endblock %}
+
+
+
+{% block title %}
+    Esgine - Home
+{% endblock %}
+
+
+{% block nav %}
+    {% if result %}
+        <li>
+            <a href="#result" class="black-text">Results</a>
+        </li>
+    {% else %}
+        <li>
+            <a href="#home" class="black-text">Home</a>
+        </li>
+    {% endif %}
+    <li>
+        <a href="#predict" class="black-text">Predict</a>
+    </li>
+    <li>
+        <a href="#help" class="black-text">Help</a>
+    </li>
+    <li>
+        <a href="#api" class="black-text">Api</a>
+    </li>
+{% endblock %}
+
+
+{% block sidenav %}
+    {% if result %}
+        <li>
+            <a href="#result" class="black-text">Results</a>
+        </li>
+    {% else %}
+        <li>
+            <a href="#home" class="black-text">Home</a>
+        </li>
+    {% endif %}
+    <li>
+        <a href="#predict" class="black-text">Predict</a>
+    </li>
+    <li>
+        <a href="#help" class="black-text">Help</a>
+    </li>
+    <li>
+        <a href="#api" class="black-text">Api</a>
+    </li>
+{% endblock %}
+
+
+{% block body %}
+
+    <!-- Slider -->
+    <section class="slider">
+        <ul class="slides">
+            <li>
+                <img src="{% static 'predict/images/img1.jpg' %}">
+                <div class="caption center-align">
+                    <h3>Lorem ipsum dolor sit amet.</h3>
+                    <h5 class="light grey-text text-lighten-3 hide-on-small-only">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, voluptates.</h5>
+                </div>
+            </li>
+            <li>
+                <img src="{% static 'predict/images/img2.jpg' %}">
+                <div class="caption left-align">
+                    <h3>Lorem ipsum dolor sit amet.</h3>
+                    <h5 class="light grey-text text-lighten-3 hide-on-small-only">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, voluptates.</h5>
+                </div>
+            </li>
+            <li>
+                <img src="{% static 'predict/images/img3.jpg' %}">
+                <div class="caption right-align">
+                    <h3>Lorem ipsum dolor sit amet.</h3>
+                    <h5 class="light grey-text text-lighten-3 hide-on-small-only">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, voluptates.</h5>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- Results -->
+    {% if result %}
+        <section id="result" class="section indigo scrollspy">
+            <div class="container">
+                <div class="white-text">
+                    <h4>Results</h4>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        {% for para in paras %}
+                            <div class="card grey lighten-4">
+                                <div class="card-content">
+                                    <span class="card-title">Topic: {{ para.topic }}, Confidence: {{ para.confidence }}</span>
+                                    <p>{{ para.para }}</p>                                   
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                
+            </div>
+        </section>
+    {% endif %}
+    
+
+    <!-- Info -->
+    <section id="home" class="section white center scrollspy">
+        <div class="container">
+             <div class="row">
+                <div class="col s12 m4 l4">
+                    <div class="card-panel teal">
+                        <span><i class="material-icons large white-text center">insert_chart</i></span><br/>
+                        <span class="white-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat veniam, molestias incidunt alias, tenetur voluptatum accusantium. Odit libero, eveniet alias corrupti aliquid, ullam facilis repudiandae magnam similique dolore ducimus expedita.
+                        </span>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card-panel teal">
+                        <span><i class="material-icons large white-text center">short_text</i></span><br/>
+                        <span class="white-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore quae non voluptas libero sapiente, porro iusto rerum nam quia quo itaque accusantium aperiam assumenda velit voluptate ipsum explicabo nihil quos!
+                        </span>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card-panel teal"> 
+                        <span><i class="material-icons large white-text center">textsms</i></span><br/>
+                        <span class="white-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A optio, nam nihil, voluptatibus quod aut error doloribus tenetur magnam, accusantium repellendus libero. Error exercitationem nobis aperiam sapiente natus dolorum repellat!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Upload -->
+    <section id="predict" class="section indigo scrollspy">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title center">Upload a csv file</span>
+                            <form action="" class="row" method="POST" id="file_upload" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="file-field input-field col s12 m12 l12">
+                                    <div class="btn waves-effect waves-light">
+                                        <span>
+                                            <i class="material-icons">mode_edit</i>
+                                        </span>
+                                        <input type="file" name="file" id="file">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-action">
+                            <a class="btn waves-effect waves-light teal lighten-1" onclick="validate()">Submit
+                                        <i class="material-icons right">send</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </section>
+
+    <!-- Help -->
+    <section id="help" class="section scrollspy">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m4 l4">
+                    <div class="card teal">
+                        <div class="card-content white-text">
+                            <span class="card-title">How It Works</span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos ut culpa alias, deleniti unde repellat. Deserunt assumenda molestiae facere maxime tenetur temporibus veniam id cum dignissimos, omnis, distinctio placeat at.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card teal">
+                        <div class="card-content white-text">
+                            <span class="card-title">What To Upload</span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste ea molestias, in quasi explicabo corrupti magni. Quod quasi, sint suscipit dolorem, velit asperiores porro, fuga sapiente fugit, nulla voluptates ad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card teal">
+                        <div class="card-content white-text">
+                            <span class="card-title">What To Expect</span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam earum cupiditate, perspiciatis ipsa incidunt temporibus eos quidem similique excepturi molestias! Distinctio quasi, consequatur tempora, ea temporibus sint dolorum velit debitis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Info -->
+    <section id="api" class="section indigo scrollspy">
+        <div class="row">
+            <div class="col s12 m3 l3">
+                <img src="{% static 'predict/images/api.png' %}" alt="" class="responsive-img">
+            </div>
+            <div class="col s12 m9 l9">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">API</span>
+                        <p class="flow-text light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum eligendi minus deleniti maxime sapiente architecto cupiditate ad, blanditiis quos alias sed itaque ea, illum voluptatem quo esse libero obcaecati non!</p><br/>
+                        <div class="card-action">
+                            <a href="#">More Info</a>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+
+{% block footer %}
+    <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+    <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+    <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+    <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+{% endblock %}
+
+{% block script %}
+    // Slider
+    slider = document.querySelector('.slider');
+    M.Slider.init(slider, {
+        indicators: false,
+        height: 500,
+        transation: 500,
+        intervall: 6000,
+    });
+            
+    // Scrollspy
+    var ss = document.querySelectorAll('.scrollspy');
+    var instances = M.ScrollSpy.init(ss, {});
+
+    // Error
+    {% if errors %}
+        {% for error in errors %}
+            M.toast({html: '{{ error }}'});
+        {% endfor %}
+    {% endif %}
+
+    // Form Validation
+    function validate(){
+        var form = document.getElementById("file_upload");
+        var file = document.getElementById("file");
+        if(file.value){
+            var extension = file.value.substring(file.value.length - 3, file.value.length);
+            if(extension == "csv"){
+                form.submit();
+            }
+            else{
+                M.toast({html: 'Please upload a csv file'});
+            }
+        }
+        else{
+            M.toast({html: 'Please select a file'});
+        }
+    }
+{% endblock %}

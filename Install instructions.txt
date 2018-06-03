@@ -20,6 +20,7 @@ $ pip install numpy==1.14.2
 $ pip install scikit-learn==0.19.1
 $ pip install scipy==1.0.1
 $ pip install sklearn==0.0
+$ pip install pandas==0.22.0
 
 # Install any other libraries if needed
 

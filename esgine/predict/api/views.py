@@ -1,13 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
-from django.shortcuts import render, redirect
 import re
 # from sklearn import *
 import numpy as np
 import os
-from io import StringIO
 import pandas as pd
+from io import StringIO
 
 
 # import required packages
@@ -35,48 +34,42 @@ def get_file_name():
         return(file)
 
 
+class Predict(APIView):
+    permission_classes = (permissions.AllowAny,)
 
-def predict(request):
-    if request.method == 'GET':
-        x = dict(request.POST)
-
-        return render(request, 'predict/home.html', {"result": False, "error": False})
-
-    if request.method == 'POST':
-        data = dict(request.POST)
+    def post(self, request, format=None):
+        data = request.data
         error = {"error": []}
         text = b""
 
         try:
             # Validating the type of input data
-            file = request.FILES["file"]
-
-            if str(type(file)) != "<class 'django.core.files.uploadedfile.InMemoryUploadedFile'>":
-                error["error"].append("Invalid value-type for key: file")
+            if str(type(data["text"])) != "<class 'django.core.files.uploadedfile.InMemoryUploadedFile'>":
+                error["error"].append("Invalid value-type for key: text")
 
             # Reading the text file
-            for chunk in file.chunks():
+            for chunk in request.data['text'].chunks():
                 text += chunk
             text = text.decode()
 
             # Validating the format of the contents of the text file
             if not bool(re.match(text_re, text)):
-                print()
                 error["error"].append("Invalid contents of text file")
 
             # Validating (parsing) the csv file
             pd.read_csv(StringIO(text))
 
-
         except UnicodeDecodeError:
             error["error"].append("Invalid text encoding")
-        except (KeyError, AttributeError):
-            error["error"].append("A csv file must be uploaded")
+        except KeyError:
+            error["error"].append("The following key is required: text")
+        except AttributeError:
+            error["error"].append("A text file must be uploaded")
         except pd.errors.ParserError:
             error["error"].append("Invalid csv file")
 
         if error["error"]:
-            return render(request, 'predict/home.html', {"result": False, "errors": error["error"]})
+            return Response(error)
 
         # Saving as a temp file
         file_name = get_file_name()
@@ -92,7 +85,5 @@ def predict(request):
         # Removing the temp file
         os.remove(file_name)
 
-        # Reformatting results for jinja template
-        final = [result[i] for i in result] 
-    
-        return render(request, 'predict/home.html', {"result": True, "error": False, "paras": final})
+        # Returning result dictionary
+        return Response(result)
